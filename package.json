@@ -1,0 +1,28 @@
+{
+  "name": "x-ray-fun",
+  "version": "1.0.0",
+  "description": "NBA Player News Scrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ulukfuni/nba-x-ray.git"
+  },
+  "keywords": [
+    "nba",
+    "scrapper",
+    "player",
+    "stats"
+  ],
+  "author": "Viet Nguyen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ulukfuni/nba-x-ray/issues"
+  },
+  "homepage": "https://github.com/ulukfuni/nba-x-ray#readme",
+  "dependencies": {
+    "x-ray": "^2.3.2"
+  }
+}

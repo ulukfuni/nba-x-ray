@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/ulukfuni/nba-x-ray#readme",
   "dependencies": {
+    "nightmare": "^2.10.0",
     "x-ray": "^2.3.2"
   }
 }

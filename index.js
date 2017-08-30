@@ -4,14 +4,20 @@ var app = express();
 const bodyParser = require('body-parser');
 const nightmare = require('nightmare')();
 const routes = require('./routes');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
+const path = require('path');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use('/', routes);
+
+try {
+	app.use('/', routes);
+} catch (e) {
+	console.log('fail');
+}
 
 app.listen(port, function(){
-	console.log('listening on port 3000');
+	console.log('listening on port 4000');
 });
 
 //use nightmare to grab rotoworld blurbs

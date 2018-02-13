@@ -1,90 +1,69 @@
 var router = require('express').Router();
 const xray = require('x-ray');
 const x = xray();
-const horseman = require('node-horseman');
-const fs = require('fs');
 
 //get blurbs in json
 //cards idea?
-router.get('/hoop-ball', function(req, res) {
+router.get('/hoop-ball', (req, res) => {
 	x('https://www.hoop-ball.com/category/nba-fantasy-news-and-advice/', '.blurb', [{
 		title: '.title',
-		text: 'div'
+		text: 'div',
+		date: '.entry-date'
 	}])
 	.paginate('.pagination span.current ~ a.inactive@href')
-	.limit(5)(function(err, obj){
+	.limit(2)((err, obj) => {
 		if (err) {
 			return res.status(500).json({error: err});
 		}
+		console.log(obj.length)
 		return res.status(200).json(obj);
 	});
 });
 
-//trial run with horseman
-//looks good
-router.get('/horse', (req, res) => {
-	const horse = new horseman();
-	horse
-		.open('http://rotoworld.com/stats/nba/931/dwyane-wade')
-		.html('#cp1_ctl01_pnlPlayerStats')
-		.then((html) => {
-			console.log(html);
-			return res.status(200).json(html);
-		})
-		.close();
-});
-
-//TODO: use await async for this part
-//https://github.com/yortus/asyncawait#6-quick-start
-let promiseFn = () => {
-	return new Promise((resolve, reject) => {
-		let promiseArray = [];
-		for (let i = 0; i < 10; i++) {
-			promiseArray.push(new Promise((resolve, reject) => {
-				const horse = new horseman();
-				let obj = {};
-				horse
-					.open(`http://www.espn.com/nba/player/_/id/${i}`)
-					.html('h1')
-					.then((html) => {
-						//TODO: additional functionality
-						//filter out old players (inactive)
-						console.log(html);
-						obj.id = i;
-						obj.player = html;
-					})
-					.close();
-				resolve(obj);
-			}));
+router.get('/rotogrinders', (req, res) => {
+	x('https://rotogrinders.com/news/nba', '.crd', [{
+		title: '.bdy h3',
+		report: '.analysis',
+		date: '.hdr time'
+	}])
+	.paginate('.pagination a:last-child@href')
+	.limit(5)((err, obj) => {
+		if (err) {
+			return res.status(500).json({error: err})
 		}
-		resolve(promiseArray);
-	});
-}
-
-//TODO: need to write script to scrap urls
-//espn - http://www.espn.com/nba/player/_/id/1987/dwyane-wade
-//gather ids and names
-router.get('/scrap-url-espn', (req, res) => {
-	let output = [];
-	
-	promiseFn().then(resp => {
-		Promise.all(resp).then(response => {
-			console.log('why do this first?');
-			console.log(response);
-		});
-	});
-	
-	//write list of players
-	// fs.writeFile('./espn.json', JSON.stringify(output), 'utf-8', (err) => {
-	// 	if (err) {
-	// 		console.log(err);
-	// 	}
-	// });	
+		console.log(obj.length)
+		return res.status(200).json(obj)
+	})
 });
 
-//TODO: make function to make basketball referene url for player
-//https://www.basketball-reference.com/players/c/curryst01.html
-// it is /players/{letter}/{first 5 of last name}+{first 2 of first name}+{01 if first iteration of this unique key}.html
-// then make a route to hit this url and confirm it works
+router.get('/rotoworld', (req, res) => {
+	x('http://www.rotoworld.com/playernews/nba/basketball-player-news', '.pb', [{
+		title: 'div.player a',
+		report: 'div.headline ~ div .report p',
+		impact: 'div.headline ~ div .impact',
+		date: 'div.headline ~ div .info .date'
+	}])((err, obj) => {
+		if (err) {
+			return res.status(500).json({error: err})
+		}
+		console.log(obj.length)
+		return res.status(200).json(obj)
+	})
+});
+
+router.get('/fantasyalarm', (req, res) => {
+	x('https://www.fantasyalarm.com/nba-player-news', '.news-card', [{
+		title: '.new-card-text a',
+		report: '.news-card-text div',
+		date: '.news-card-time'
+	}])((err, obj) => {
+		if (err) {
+			return res.status(500).json({error: err})
+		}
+		console.log(obj.length)
+		return res.status(200).json(obj)
+	});
+});
+
 
 module.exports = router;

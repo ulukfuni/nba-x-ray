@@ -4,7 +4,8 @@
   "description": "NBA Player News Scrapper",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -26,9 +27,10 @@
     "asyncawait": "^1.0.6",
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "nightmare": "^2.10.0",
-    "node-horseman": "^3.3.0",
     "phantomjs": "^2.1.7",
     "x-ray": "^2.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.14.12"
   }
 }
